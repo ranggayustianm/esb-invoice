@@ -74,9 +74,7 @@ class InvoiceController extends Controller
     public function actionCreate()
     {
         $model = new Invoice();
-        $partiesForDropDown = $this->getParties();
-
-        
+        $partiesForDropDown = $this->getParties();     
 
         if ($this->request->isPost) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -84,19 +82,16 @@ class InvoiceController extends Controller
                 $post = $this->request->post();
                 $post['Item'] = array_values($post['Item']);
 
-                if ($model->load($post, 'Invoice') && $model->save()) {                       
-                    $itemsCount = count($post['Item']);
+                if ($model->load($post, 'Invoice') && $model->save()) {              
 
-                    for($i = 0; $i < $itemsCount; $i++){
-                        $post['Item'][$i]['invoice_id'] = $model->id;
-                       
+                    foreach ($post['Item'] as $item) {
                         $modelItem = new Item();
-                        $modelItem->invoice_id = $post['Item'][$i]['invoice_id'];
-                        $modelItem->amount = $post['Item'][$i]['amount'];
-                        $modelItem->item_type = $post['Item'][$i]['item_type'];
-                        $modelItem->description = $post['Item'][$i]['description'];
-                        $modelItem->quantity = $post['Item'][$i]['quantity'];
-                        $modelItem->unit_price = $post['Item'][$i]['unit_price'];
+                        $modelItem->invoice_id = $model->id;
+                        $modelItem->amount = $item['amount'];
+                        $modelItem->item_type = $item['item_type'];
+                        $modelItem->description = $item['description'];
+                        $modelItem->quantity = $item['quantity'];
+                        $modelItem->unit_price = $item['unit_price'];
                         if (!$modelItem->save()) {
                             Yii::$app->session->setFlash('error', $modelItem->getErrorSummary(true));
                             return $this->render('create', [
@@ -150,17 +145,14 @@ class InvoiceController extends Controller
                 if ($model->load($post, 'Invoice') && $model->save()) { 
                     Item::deleteAll(['invoice_id' => $model->id]);
 
-                    $itemsCount = count($post['Item']);
-                    for($i = 0; $i < $itemsCount; $i++){
-                        $post['Item'][$i]['invoice_id'] = $model->id;
-                       
+                    foreach ($post['Item'] as $item) {
                         $modelItem = new Item();
-                        $modelItem->invoice_id = $post['Item'][$i]['invoice_id'];
-                        $modelItem->amount = $post['Item'][$i]['amount'];
-                        $modelItem->item_type = $post['Item'][$i]['item_type'];
-                        $modelItem->description = $post['Item'][$i]['description'];
-                        $modelItem->quantity = $post['Item'][$i]['quantity'];
-                        $modelItem->unit_price = $post['Item'][$i]['unit_price'];
+                        $modelItem->invoice_id = $model->id;
+                        $modelItem->amount = $item['amount'];
+                        $modelItem->item_type = $item['item_type'];
+                        $modelItem->description = $item['description'];
+                        $modelItem->quantity = $item['quantity'];
+                        $modelItem->unit_price = $item['unit_price'];
                         if (!$modelItem->save()) {
                             Yii::$app->session->setFlash('error', $modelItem->getErrorSummary(true));
                             return $this->render('create', [
@@ -169,7 +161,7 @@ class InvoiceController extends Controller
                             ]);
                         }
                     }
-                    
+
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
@@ -185,7 +177,6 @@ class InvoiceController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        Yii::$app->session->setFlash('error', "User not saved.");
         return $this->render('update', [
             'model' => $model,
             'partiesForDropDown' => $partiesForDropDown,

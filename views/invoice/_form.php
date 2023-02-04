@@ -53,85 +53,71 @@ use kartik\date\DatePicker;
             <div class="col-6"><?= $form->field($model, 'party_from')->dropDownList($partiesForDropDown) ?></div>
             <div class="col-6"><?= $form->field($model, 'party_to')->dropDownList($partiesForDropDown) ?></div>
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-10"><h3>Items</h3></div>
+            <div class="col-2"><button type="button" class="btn btn-primary add-item">Add Items</button></div>
+        </div>
+        <div class="row">
+            <div class="col-12">                         
+                <table class="table table-bordered" id="item-table">
+                    <thead>
+                        <tr>
+                            <th>Item Type</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th style="width: 5%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if(is_null($itemsFromDb)):?>
+                            <tr>
+                                <td>
+                                    <select class="form-control item-type" name="Item[0][item_type]" required>
+                                        <option value="Service">Service</option>
+                                        <option value="Product">Product</option>
+                                        <option value="Shipping">Shipping</option>
+                                        <option value="Tax">Tax</option>
+                                        <option value="Miscellaneous">Miscellaneous</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="form-control description" name="Item[0][description]" required></td>
+                                <td><input type="text" class="form-control quantity" name="Item[0][quantity]" required></td>
+                                <td><input type="text" class="form-control unit-price" name="Item[0][unit_price]" required></td>
+                                <td><input type="text" class="form-control amount" name="Item[0][amount]" required></td>
+                                <td><button type="button" class="btn btn-danger remove-item">Remove</button></td>
+                                <input type="hidden" name="Item[0][invoice_id]" value="">
+                            </tr>
+                        <?php else:?>
+                            <?php foreach($itemsFromDb as $key => $item):?>
+                                <tr>
+                                    <td>
+                                        <select class="form-control item-type" name="Item[<?= $key ?>][item_type]" required>
+                                            <option value="Service" <?= $item->item_type === "Service" ? "selected" : "" ?>>Service</option>
+                                            <option value="Product" <?= $item->item_type === "Product" ? "selected" : "" ?>>Product</option>
+                                            <option value="Shipping" <?= $item->item_type === "Shipping" ? "selected" : "" ?>>Shipping</option>
+                                            <option value="Tax" <?= $item->item_type === "Tax" ? "selected" : "" ?>>Tax</option>
+                                            <option value="Miscellaneous" <?= $item->item_type === "Miscellaneous" ? "selected" : "" ?>>Miscellaneous</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" value="<?= $item->description ?>" class="form-control description" name="Item[<?= $key ?>][description]" required></td>
+                                    <td><input type="text" value="<?= $item->quantity ?>" class="form-control quantity" name="Item[<?= $key ?>][quantity]" required></td>
+                                    <td><input type="text" value="<?= $item->unit_price ?>" class="form-control unit-price" name="Item[<?= $key ?>][unit_price]" required></td>
+                                    <td><input type="text" value="<?= $item->amount ?>" class="form-control amount" name="Item[<?= $key ?>][amount]" required></td>
+                                    <td><button type="button" class="btn btn-danger remove-item">Remove</button></td>
+                                    <input type="hidden" name="Item[<?= $key ?>][invoice_id]" value="<?= $item->invoice_id ?>">
+                                </tr>
+                            <?php endforeach;?>
+                        <?php endif;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <br\>
-    <br\>
-    <h3>Items</h3>
-
-    <table class="table table-bordered" id="item-table">
-        <thead>
-            <tr>
-                <th>Item Type</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Amount</th>
-                <th style="width: 5%">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if(is_null($itemsFromDb)):?>
-            <tr>
-                <td>
-                    <select class="form-control item-type" name="Item[0][item_type]" required>
-                        <option value="Service">Service</option>
-                        <option value="Product">Product</option>
-                        <option value="Shipping">Shipping</option>
-                        <option value="Tax">Tax</option>
-                        <option value="Miscellaneous">Miscellaneous</option>
-                    </select>
-                </td>
-                <td><input type="text" class="form-control description" name="Item[0][description]" required></td>
-                <td><input type="text" class="form-control quantity" name="Item[0][quantity]" required></td>
-                <td><input type="text" class="form-control unit-price" name="Item[0][unit_price]" required></td>
-                <td><input type="text" class="form-control amount" name="Item[0][amount]" required></td>
-                <td><button type="button" class="btn btn-danger remove-item">Remove</button></td>
-                <input type="hidden" name="Item[0][invoice_id]" value="">
-                <input type="hidden" name="Item[0][id]" value="">
-            </tr>
-            <?php else:?>
-                <?php foreach($itemsFromDb as $key => $item):?>
-                    <tr>
-                        <td>
-                            <select class="form-control item-type" name="Item[<?= $key ?>][item_type]" required>
-                                <option value="Service" <?= $item->item_type === "Service" ? "selected" : "" ?>>Service</option>
-                                <option value="Product" <?= $item->item_type === "Product" ? "selected" : "" ?>>Product</option>
-                                <option value="Shipping" <?= $item->item_type === "Shipping" ? "selected" : "" ?>>Shipping</option>
-                                <option value="Tax" <?= $item->item_type === "Tax" ? "selected" : "" ?>>Tax</option>
-                                <option value="Miscellaneous" <?= $item->item_type === "Miscellaneous" ? "selected" : "" ?>>Miscellaneous</option>
-                            </select>
-                        </td>
-                        <td><input type="text" value="<?= $item->description ?>" class="form-control description" name="Item[<?= $key ?>][description]" required></td>
-                        <td><input type="text" value="<?= $item->quantity ?>" class="form-control quantity" name="Item[<?= $key ?>][quantity]" required></td>
-                        <td><input type="text" value="<?= $item->unit_price ?>" class="form-control unit-price" name="Item[<?= $key ?>][unit_price]" required></td>
-                        <td><input type="text" value="<?= $item->amount ?>" class="form-control amount" name="Item[<?= $key ?>][amount]" required></td>
-                        <td><button type="button" class="btn btn-danger remove-item">Remove</button></td>
-                        <input type="hidden" name="Item[<?= $key ?>][invoice_id]" value="<?= $item->invoice_id ?>">
-                        <input type="hidden" name="Item[<?= $key ?>][id]" value="<?= $item->id ?>">
-                    </tr>
-                <?php endforeach;?>
-            <?php endif;?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5"></td>
-                <td><button type="button" class="btn btn-primary add-item">Add</button></td>
-            </tr>
-        </tfoot>
-    </table>
 
 
     <div class="form-group">
@@ -150,24 +136,24 @@ use kartik\date\DatePicker;
         $(document).on('click', '.add-item', function() {
             i++;
             var html = 
-            '<tr>' +
-            '<td>' +
-            '<select class="form-control item-type" name="Item[' + i + '][item_type]" required>' +
-            '<option value="Service">Service</option>' +
-            '<option value="Product">Product</option>' +
-            '<option value="Shipping">Shipping</option>' +
-            '<option value="Tax">Tax</option>' +
-            '<option value="Miscellaneous">Miscellaneous</option>' +
-            '</select>' +
-            '</td>' +
-            '<td><input type="text" class="form-control description" name="Item[' + i + '][description]" required></td>' +
-            '<td><input type="text" class="form-control quantity" name="Item[' + i + '][quantity]" required></td>' +
-            '<td><input type="text" class="form-control unit-price" name="Item[' + i + '][unit_price]" required></td>' +
-            '<td><input type="text" class="form-control amount" name="Item[' + i + '][amount]" required></td>' +
-            '<td><button type="button" class="btn btn-danger remove-item">Remove</button></td>' +
-            '<input type="hidden" name="Item[' + i + '][invoice_id]" value="">' +
-            '<input type="hidden" name="Item[' + i + '][id]" value="">' +
-            '</tr>';
+                '<tr> \
+                    <td> \
+                        <select class="form-control item-type" name="Item['+i+'][item_type]" required> \
+                            <option value="Service">Service</option> \
+                            <option value="Product">Product</option> \
+                            <option value="Shipping">Shipping</option> \
+                            <option value="Tax">Tax</option> \
+                            <option value="Miscellaneous">Miscellaneous</option> \
+                        </select> \
+                    </td> \
+                    <td><input type="text" class="form-control description" name="Item['+i+'][description]" required></td> \
+                    <td><input type="text" class="form-control quantity" name="Item['+i+'][quantity]" required></td> \
+                    <td><input type="text" class="form-control unit_price" name="Item['+i+'][unit_price]" required></td> \
+                    <td><input type="text" class="form-control amount" name="Item['+i+'][amount]" required></td> \
+                    <td><button type="button" class="btn btn-danger remove-item">Remove</button></td> \
+                    <input type="hidden" name="Item['+i+'][invoice_id]" value=""> \
+                </tr>'
+                ;
             $('#item-table tbody').append(html)
         });
         $(document).on('click', '.remove-item', function() {
