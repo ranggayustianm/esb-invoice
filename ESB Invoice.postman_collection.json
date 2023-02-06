@@ -12,14 +12,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api",
+					"raw": "http://localhost:8080/api/invoice",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"api"
+						"api",
+						"invoice"
 					]
 				}
 			},
@@ -31,7 +32,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/1",
+					"raw": "http://localhost:8080/api/invoice/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,6 +40,7 @@
 					"port": "8080",
 					"path": [
 						"api",
+						"invoice",
 						"1"
 					]
 				}
@@ -51,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/11112345",
+					"raw": "http://localhost:8080/api/invoice/11112345",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -59,6 +61,7 @@
 					"port": "8080",
 					"path": [
 						"api",
+						"invoice",
 						"11112345"
 					]
 				}

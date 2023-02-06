@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace app\controllers\api;
 
 use yii\rest\Controller;
 use app\models\Invoice;
@@ -8,7 +8,7 @@ use app\models\Party;
 use DateTime;
 use yii\web\NotFoundHttpException;
 
-class ApiController extends Controller
+class InvoiceController extends Controller
 {
 
     public function actionIndex()

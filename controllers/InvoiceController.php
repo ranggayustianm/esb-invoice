@@ -7,13 +7,11 @@ use app\models\Invoice;
 use app\models\InvoiceSearch;
 use app\models\Item;
 use app\models\Party;
-use Exception;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Session;
 
 /**
  * InvoiceController implements the CRUD actions for Invoice model.
@@ -101,13 +99,8 @@ class InvoiceController extends Controller
                 if ($model->load($post, 'Invoice') && $model->save()) {              
 
                     foreach ($post['Item'] as $item) {
-                        $modelItem = new Item();
-                        $modelItem->invoice_id = $model->id;
-                        $modelItem->amount = $item['amount'];
-                        $modelItem->item_type = $item['item_type'];
-                        $modelItem->description = $item['description'];
-                        $modelItem->quantity = $item['quantity'];
-                        $modelItem->unit_price = $item['unit_price'];
+                        $modelItem = $this->createNewItem($model->id, $item);
+                        
                         if (!$modelItem->save()) {
                             Yii::$app->session->setFlash('error', $modelItem->getErrorSummary(true));
                             return $this->render('create', [
@@ -162,18 +155,14 @@ class InvoiceController extends Controller
                     Item::deleteAll(['invoice_id' => $model->id]);
 
                     foreach ($post['Item'] as $item) {
-                        $modelItem = new Item();
-                        $modelItem->invoice_id = $model->id;
-                        $modelItem->amount = $item['amount'];
-                        $modelItem->item_type = $item['item_type'];
-                        $modelItem->description = $item['description'];
-                        $modelItem->quantity = $item['quantity'];
-                        $modelItem->unit_price = $item['unit_price'];
+                        $modelItem = $this->createNewItem($model->id, $item);
+
                         if (!$modelItem->save()) {
                             Yii::$app->session->setFlash('error', $modelItem->getErrorSummary(true));
-                            return $this->render('create', [
+                            return $this->render('update', [
                                 'model' => $model,
-                                'partiesForDropDown' => $partiesForDropDown
+                                'partiesForDropDown' => $partiesForDropDown,
+                                'itemsFromDb' => $itemsFromDb,
                             ]);
                         }
                     }
@@ -234,5 +223,18 @@ class InvoiceController extends Controller
     {
         $parties = Party::find()->all();
         return array('' => 'Select a party') + ArrayHelper::map($parties, 'id', 'party_name');
+    }
+
+    private function createNewItem(int $invoiceId, $item) 
+    {
+        $modelItem = new Item();
+        $modelItem->invoice_id = $invoiceId;
+        $modelItem->amount = $item['amount'];
+        $modelItem->item_type = $item['item_type'];
+        $modelItem->description = $item['description'];
+        $modelItem->quantity = $item['quantity'];
+        $modelItem->unit_price = $item['unit_price'];
+
+        return $modelItem;
     }
 }
