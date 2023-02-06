@@ -29,14 +29,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'invoice_id',
-            'issue_date',
-            'due_date',
+            [
+                'attribute' => 'issue_date',
+                'format' => ['datetime', 'php:d F Y']
+            ],
+            [
+                'attribute' => 'due_date',
+                'format' => ['datetime', 'php:d F Y']
+            ],
             'subject',
-            //'is_paid',
-            //'party_from',
-            //'party_to',
+            'is_paid:boolean',
+            [
+                'attribute'=>'party_from',
+                'value'=> 'partyFromLabel',
+            ],
+            [
+                'attribute'=>'party_to',
+                'value'=> 'partyToLabel',
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Invoice $model, $key, $index, $column) {
