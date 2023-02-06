@@ -66,9 +66,4 @@ class Item extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Invoice::class, ['id' => 'invoice_id']);
     }
-
-    public function getAmountSubtotal()
-    {
-        return $this->amount;
-    }
 }

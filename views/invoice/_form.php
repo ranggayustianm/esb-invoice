@@ -56,7 +56,9 @@ use kartik\date\DatePicker;
         <hr>
         <div class="row">
             <div class="col-10"><h3>Items</h3></div>
-            <div class="col-2"><button type="button" class="btn btn-primary add-item">Add Items</button></div>
+        </div>
+        <div class="row">
+            <p><button type="button" class="btn btn-primary add-item">Add Items</button></p>
         </div>
         <div class="row">
             <div class="col-12">                         

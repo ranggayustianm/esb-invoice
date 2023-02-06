@@ -84,7 +84,7 @@ class Invoice extends \yii\db\ActiveRecord
 
     public function getPartyFromLabel()
     {
-        return $this->hasOne(Party::class, ['id' => 'party_from'])->one()->party_name;
+        return $this->getPartyFrom()->one()->party_name;
     }
 
     /**
@@ -99,6 +99,6 @@ class Invoice extends \yii\db\ActiveRecord
 
     public function getPartyToLabel()
     {
-        return $this->hasOne(Party::class, ['id' => 'party_to'])->one()->party_name;
+        return $this->getPartyTo()->one()->party_name;
     }
 }

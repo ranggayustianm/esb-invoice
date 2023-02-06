@@ -12,9 +12,6 @@ class m230203_124655_add_party_fks_to_invoice_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('invoice', 'party_from', $this->integer()->notNull());
-        $this->addColumn('invoice', 'party_to', $this->integer()->notNull());
-    
         $this->createIndex(
             'idx-invoice-party_from',
             'invoice',
@@ -70,9 +67,7 @@ class m230203_124655_add_party_fks_to_invoice_table extends Migration
             'idx-invoice-party_from',
             'invoice'
         );
-        
-        $this->dropColumn('invoice', 'party_to');
-        $this->dropColumn('invoice', 'party_from');        
+         
     }
 
     /*

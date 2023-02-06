@@ -31,7 +31,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/15",
+					"raw": "http://localhost:8080/api/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,7 +39,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"15"
+						"1"
 					]
 				}
 			},

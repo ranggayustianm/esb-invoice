@@ -36,6 +36,15 @@ class m230203_125957_create_item_table extends Migration
             'id',
             'CASCADE'
         );
+
+        $this->insert('item', [
+            'item_type' => 'Service',
+            'description' => 'Item 1',
+            'quantity' => '5',
+            'unit_price' => '100',
+            'amount' => '500',
+            'invoice_id' => '1',
+        ]);
     }
 
     /**
@@ -43,6 +52,8 @@ class m230203_125957_create_item_table extends Migration
      */
     public function safeDown()
     {
+        $this->delete('item', ['id' => 1]);
+
         $this->dropForeignKey(
             'fk-item-invoice_id',
             'item'
