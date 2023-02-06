@@ -31,22 +31,18 @@ class InvoiceController extends Controller
         }
         
         $this->prepareInvoiceOutput($invoice);
-        $invoiceItems = $invoice->getItems()->all();
+        $invoiceItemsQuery = $invoice->getItems();
+        $invoiceItems = $invoiceItemsQuery->all();
 
-        $subtotal = 0;
-        $tax10Percent = 0;
-        $payments = 0;
-        foreach ($invoiceItems as $invoiceItem) {
-            $subtotal += $invoiceItem->amount;
-        }
-        $tax10Percent = $subtotal * 0.1;
-        $payments = ($subtotal + $tax10Percent) * -1;
+        $itemsSubtotal = (double)$invoiceItemsQuery->sum('amount');
+        $itemsTax = $itemsSubtotal * 0.1;
+        $itemsPayments = ($itemsSubtotal + $itemsTax) * -1;
 
         $invoiceToBeReturned = $invoice->toArray();
         $invoiceToBeReturned['items'] = $invoiceItems;
-        $invoiceToBeReturned['subtotal'] = $subtotal;
-        $invoiceToBeReturned['tax10Percent'] = $tax10Percent;
-        $invoiceToBeReturned['payments'] = $payments;
+        $invoiceToBeReturned['subtotal'] = $itemsSubtotal;
+        $invoiceToBeReturned['tax'] = $itemsTax;
+        $invoiceToBeReturned['payments'] = $itemsPayments;
 
         return $invoiceToBeReturned;
     }
