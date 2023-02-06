@@ -86,7 +86,7 @@ use kartik\date\DatePicker;
                                 <td><input type="text" class="form-control description" name="Item[0][description]" required></td>
                                 <td><input type="text" class="form-control quantity" name="Item[0][quantity]" required></td>
                                 <td><input type="text" class="form-control unit-price" name="Item[0][unit_price]" required></td>
-                                <td><input type="text" class="form-control amount" name="Item[0][amount]" required></td>
+                                <td><input type="text" class="form-control amount" name="Item[0][amount]" required readonly></td>
                                 <td><button type="button" class="btn btn-danger remove-item">Remove</button></td>
                                 <input type="hidden" name="Item[0][invoice_id]" value="">
                             </tr>
@@ -148,8 +148,8 @@ use kartik\date\DatePicker;
                     </td> \
                     <td><input type="text" class="form-control description" name="Item['+i+'][description]" required></td> \
                     <td><input type="text" class="form-control quantity" name="Item['+i+'][quantity]" required></td> \
-                    <td><input type="text" class="form-control unit_price" name="Item['+i+'][unit_price]" required></td> \
-                    <td><input type="text" class="form-control amount" name="Item['+i+'][amount]" required></td> \
+                    <td><input type="text" class="form-control unit-price" name="Item['+i+'][unit_price]" required></td> \
+                    <td><input type="text" class="form-control amount" name="Item['+i+'][amount]" required readonly></td> \
                     <td><button type="button" class="btn btn-danger remove-item">Remove</button></td> \
                     <input type="hidden" name="Item['+i+'][invoice_id]" value=""> \
                 </tr>'
@@ -158,6 +158,22 @@ use kartik\date\DatePicker;
         });
         $(document).on('click', '.remove-item', function() {
             $(this).closest('tr').remove();            
+        });
+
+        $(document).on('keyup', '.quantity', function(){
+            var row = $(this).closest('tr');
+            var unitPrice = row.find('.unit-price').val();
+            var quantity = $(this).val();
+            var amount = unitPrice * quantity;
+            row.find('.amount').val(amount);
+        });
+
+        $(document).on('keyup', '.unit-price', function(){
+            var row = $(this).closest('tr');
+            var quantity = row.find('.quantity').val();
+            var unitPrice = $(this).val();
+            var amount = unitPrice * quantity;
+            row.find('.amount').val(amount);
         });
     JS;
     $this->registerJs($formJs, View::POS_END, 'dynamic-table');

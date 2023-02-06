@@ -8,6 +8,7 @@ use app\models\InvoiceSearch;
 use app\models\Item;
 use app\models\Party;
 use Exception;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -61,8 +62,23 @@ class InvoiceController extends Controller
      */
     public function actionView($id)
     {
+        $queryCondition = ['invoice_id' => $id];
+        $query = Item::find()->where($queryCondition);
+
+        $itemsSubtotal = $query->sum('amount');
+        $itemsTax = $itemsSubtotal * 0.1;
+        $itemsPayments = ($itemsSubtotal + $itemsTax) * -1;
+
+        $itemsDataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'itemsDataProvider' => $itemsDataProvider,
+            'itemsSubtotal' => $itemsSubtotal,
+            'itemsTax' => $itemsTax,
+            'itemsPayments' => $itemsPayments,
         ]);
     }
 
